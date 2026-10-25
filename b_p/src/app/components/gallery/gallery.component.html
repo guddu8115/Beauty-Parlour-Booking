@@ -1,0 +1,63 @@
+<!-- Hero -->
+<div class="gallery-hero">
+  <h1>🖼️ Our Gallery</h1>
+  <p>See the magic we create for our beautiful clients</p>
+</div>
+
+<!-- Loading -->
+<div class="loading" *ngIf="loading">
+  <div class="spinner"></div>
+  <p>Loading gallery...</p>
+</div>
+
+<!-- Gallery -->
+<div class="gallery-grid" *ngIf="!loading">
+  <div class="gallery-item"
+       *ngFor="let item of filteredItems"
+       (click)="openModal(item)">
+
+    <img
+      [src]="item.imageUrl"
+      [alt]="item.name"
+      onerror="this.src='assets/images/g1.jpg'"
+    />
+
+    <div class="item-overlay">
+      <span class="item-name">{{ item.name }}</span>
+      <span class="zoom-icon">🔍</span>
+    </div>
+
+  </div>
+</div>
+
+<!-- Empty -->
+<div class="empty" *ngIf="!loading && filteredItems.length === 0">
+  <p>No photos available</p>
+</div>
+
+<!-- Modal -->
+<div class="modal-overlay" *ngIf="selectedItem" (click)="closeModal()">
+  <div class="modal-box" (click)="$event.stopPropagation()">
+
+    <button class="close-btn" (click)="closeModal()">✕</button>
+
+    <img
+      [src]="selectedItem.imageUrl"
+      [alt]="selectedItem.name"
+      onerror="this.src='assets/images/g1.jpg'"
+    />
+
+    <div class="modal-info">
+      <h3>{{ selectedItem.name }}</h3>
+      <p>{{ selectedItem.description }}</p>
+    </div>
+
+  </div>
+</div>
+
+<!-- CTA -->
+<div class="cta-section">
+  <h2>✨ Ready for Your Transformation?</h2>
+  <p>Book an appointment today</p>
+  <a routerLink="/services" class="cta-btn">Browse Services →</a>
+</div>

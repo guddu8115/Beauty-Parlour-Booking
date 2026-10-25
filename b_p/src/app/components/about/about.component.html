@@ -1,0 +1,101 @@
+<!-- Hero -->
+<div class="about-hero">
+  <div class="hero-content">
+    <h1>💄 About Us</h1>
+    <p>Your beauty is our passion. Welcome to Glamour Studio.</p>
+  </div>
+</div>
+
+<!-- Our Story -->
+<div class="section story-section">
+  <div class="story-img">
+    <img src="https://images.unsplash.com/photo-1560066984-138dadb4c035?w=600"
+         alt="Salon" onerror="this.src='https://via.placeholder.com/600x400?text=Our+Salon'"/>
+  </div>
+  <div class="story-text">
+    <span class="section-tag">Our Story</span>
+    <h2>A Decade of Beauty Excellence</h2>
+    <p>Welcome to <strong>Glamour Studio</strong> — where beauty meets expertise. Founded in 2014,
+      we have been dedicated to helping our clients look and feel their absolute best.</p>
+    <p>Our team of passionate beauty professionals brings years of experience, creativity, and
+      attention to detail to every service we provide. From everyday grooming to special occasion
+      makeovers, we've got you covered.</p>
+    <p>We believe every person deserves to feel beautiful and confident. That's why we offer
+      personalized services tailored to your unique needs and preferences.</p>
+    <a routerLink="/services" class="cta-btn">Explore Our Services →</a>
+  </div>
+</div>
+
+<!-- Why Choose Us -->
+<div class="section features-section">
+  <div class="section-header">
+    <span class="section-tag">Why Choose Us</span>
+    <h2>What Makes Us Special</h2>
+  </div>
+  <div class="features-grid">
+    <div class="feature-card" *ngFor="let f of features">
+      <div class="feature-icon">{{ f.icon }}</div>
+      <h3>{{ f.title }}</h3>
+      <p>{{ f.desc }}</p>
+    </div>
+  </div>
+</div>
+
+<!-- Team -->
+<div class="section team-section">
+  <div class="section-header">
+    <span class="section-tag">Our Team</span>
+    <h2>Meet Our Experts</h2>
+  </div>
+
+  <div class="team-grid">
+    <div class="team-card" *ngFor="let m of team">
+
+      <!-- ✅ IMAGE REPLACED HERE -->
+      <div class="team-avatar">
+        <img [src]="m.image" alt="{{m.name}}">
+      </div>
+
+      <h3>{{ m.name }}</h3>
+      <p class="role">{{ m.role }}</p>
+      <span class="exp-badge">{{ m.exp }}</span>
+    </div>
+  </div>
+</div>
+
+<!-- Contact Info -->
+<div class="contact-section">
+  <div class="contact-card">
+    <h2>📍 Visit Us</h2>
+    <div class="contact-grid">
+      <div class="contact-item">
+        <span class="contact-icon">📍</span>
+        <div>
+          <strong>Address</strong>
+          <p>123 Business hub , Main Street<br/>Surat, Gujarat - 395001</p>
+        </div>
+      </div>
+      <div class="contact-item">
+        <span class="contact-icon">📞</span>
+        <div>
+          <strong>Phone</strong>
+          <p>+91 98765 43210<br/>+91 87654 32109</p>
+        </div>
+      </div>
+      <div class="contact-item">
+        <span class="contact-icon">🕐</span>
+        <div>
+          <strong>Working Hours</strong>
+          <p>Mon–Sat: 9:00 AM – 7:00 PM<br/>Sunday: 10:00 AM – 5:00 PM</p>
+        </div>
+      </div>
+      <div class="contact-item">
+        <span class="contact-icon">📧</span>
+        <div>
+          <strong>Email</strong>
+          <p>info&#64;glamourstudio.com<br/>booking&#64;glamourstudio.com</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

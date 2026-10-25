@@ -1,0 +1,136 @@
+<div class="auth-page">
+
+    <!-- LEFT PANEL -->
+    <div class="auth-left">
+      <div class="left-content">
+        <div class="brand">
+          <div class="brand-icon">💄</div>
+          <h2>Beauty Parlor</h2>
+          <p>Your beauty, our passion</p>
+        </div>
+  
+        <div class="welcome-text">
+          <h3>Welcome Back! 👋</h3>
+          <p>
+            Login to access your bookings, explore our premium
+            beauty services, and manage your profile.
+          </p>
+        </div>
+  
+        <div class="perks">
+          <div class="perk-item">
+            <span class="perk-icon">📅</span>
+            <span>View & manage your bookings</span>
+          </div>
+          <div class="perk-item">
+            <span class="perk-icon">💅</span>
+            <span>Book premium beauty services</span>
+          </div>
+          <div class="perk-item">
+            <span class="perk-icon">👤</span>
+            <span>Update your profile anytime</span>
+          </div>
+          <div class="perk-item">
+            <span class="perk-icon">🎁</span>
+            <span>Get exclusive offers & deals</span>
+          </div>
+        </div>
+      </div>
+  
+      <!-- Decorative circles -->
+      <div class="circle circle-1"></div>
+      <div class="circle circle-2"></div>
+      <div class="circle circle-3"></div>
+    </div>
+  
+    <!-- RIGHT PANEL -->
+    <div class="auth-right">
+      <div class="auth-card">
+  
+        <!-- Header -->
+        <div class="card-header">
+          <div class="card-icon">🔑</div>
+          <h2>Welcome Back</h2>
+          <p>Login to your account to continue</p>
+        </div>
+  
+        <!-- Error Alert -->
+        <div class="alert error" *ngIf="error">
+          <span class="alert-icon">⚠️</span>
+          <span>{{ error }}</span>
+        </div>
+  
+        <!-- Email -->
+        <div class="form-group">
+          <label>
+            <span class="label-icon">📧</span>
+            Email Address <span class="req">*</span>
+          </label>
+          <input
+            type="email"
+            [(ngModel)]="email"
+            placeholder="Enter your email"
+            [class.invalid]="submitted && !email.trim()"
+            (keyup.enter)="login()"
+          />
+          <span class="field-err" *ngIf="submitted && !email.trim()">
+            Email is required
+          </span>
+        </div>
+  
+        <!-- Password -->
+        <div class="form-group">
+          <label>
+            <span class="label-icon">🔒</span>
+            Password <span class="req">*</span>
+          </label>
+          <div class="input-wrap">
+            <input
+              [type]="showPassword ? 'text' : 'password'"
+              [(ngModel)]="password"
+              placeholder="Enter your password"
+              [class.invalid]="submitted && !password"
+              (keyup.enter)="login()"
+            />
+            <button class="eye-btn" (click)="togglePassword()" type="button">
+              {{ showPassword ? '🙈' : '👁️' }}
+            </button>
+          </div>
+          <span class="field-err" *ngIf="submitted && !password">
+            Password is required
+          </span>
+        </div>
+  
+        <!-- Submit Button -->
+        <button
+          (click)="login()"
+          [disabled]="loading"
+          class="btn-submit"
+        >
+          <span *ngIf="!loading">🔑 Login to Account</span>
+          <span *ngIf="loading" class="loading-text">
+            <span class="btn-spinner"></span>
+            Logging in...
+          </span>
+        </button>
+  
+        <!-- Divider -->
+        <div class="divider">
+          <span>Don't have an account?</span>
+        </div>
+  
+        <!-- Register Link -->
+        <a routerLink="/register" class="btn-register">
+          🌸 Create New Account
+        </a>
+  
+        <!-- Admin hint -->
+        <div class="admin-hint">
+          <span>🔐</span>
+          <p>Admin? Use your admin credentials to access the admin panel.</p>
+        </div>
+  
+      </div>
+    </div>
+  
+  </div>

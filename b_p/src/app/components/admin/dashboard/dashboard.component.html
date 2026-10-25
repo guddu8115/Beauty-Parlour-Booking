@@ -1,0 +1,312 @@
+<div class="page">
+
+    <!-- PAGE HEADER -->
+    <div class="page-header">
+      <div class="header-left">
+        <h1>📊 Admin Dashboard</h1>
+        <p>Welcome back, Admin! Here's your beauty parlour overview.</p>
+      </div>
+      <button (click)="loadAll()" class="btn-refresh">🔄 Refresh</button>
+    </div>
+  
+    <!-- ERROR -->
+    <div class="alert-error" *ngIf="error">
+      ⚠️ {{ error }}
+    </div>
+  
+    <!-- LOADING SPINNER -->
+    <div class="loading-state" *ngIf="loading">
+      <div class="spinner"></div>
+      <p>Loading dashboard...</p>
+    </div>
+  
+    <ng-container *ngIf="!loading">
+  
+      <!-- ===== STAT CARDS ===== -->
+      <div class="stats-grid">
+  
+        <div class="stat-card pink">
+          <div class="stat-icon-wrap">
+            <span class="stat-icon">👥</span>
+          </div>
+          <div class="stat-info">
+            <h2>{{ totalUsers }}</h2>
+            <p>Total Users</p>
+            <span>Registered customers</span>
+          </div>
+          <div class="stat-wave">
+            <svg viewBox="0 0 200 60" preserveAspectRatio="none">
+              <path d="M0,30 C50,0 150,60 200,30 L200,60 L0,60 Z"
+                fill="rgba(255,255,255,0.15)"/>
+            </svg>
+          </div>
+        </div>
+  
+        <div class="stat-card purple">
+          <div class="stat-icon-wrap">
+            <span class="stat-icon">💅</span>
+          </div>
+          <div class="stat-info">
+            <h2>{{ totalServices }}</h2>
+            <p>Total Services</p>
+            <span>{{ activeServices }} active</span>
+          </div>
+          <div class="stat-wave">
+            <svg viewBox="0 0 200 60" preserveAspectRatio="none">
+              <path d="M0,30 C50,0 150,60 200,30 L200,60 L0,60 Z"
+                fill="rgba(255,255,255,0.15)"/>
+            </svg>
+          </div>
+        </div>
+  
+        <div class="stat-card blue">
+          <div class="stat-icon-wrap">
+            <span class="stat-icon">📅</span>
+          </div>
+          <div class="stat-info">
+            <h2>{{ totalBookings }}</h2>
+            <p>Total Bookings</p>
+            <span>{{ pendingCount }} pending</span>
+          </div>
+          <div class="stat-wave">
+            <svg viewBox="0 0 200 60" preserveAspectRatio="none">
+              <path d="M0,30 C50,0 150,60 200,30 L200,60 L0,60 Z"
+                fill="rgba(255,255,255,0.15)"/>
+            </svg>
+          </div>
+        </div>
+  
+        <div class="stat-card green">
+          <div class="stat-icon-wrap">
+            <span class="stat-icon">✅</span>
+          </div>
+          <div class="stat-info">
+            <h2>{{ confirmedCount }}</h2>
+            <p>Confirmed</p>
+            <span>{{ completedCount }} completed</span>
+          </div>
+          <div class="stat-wave">
+            <svg viewBox="0 0 200 60" preserveAspectRatio="none">
+              <path d="M0,30 C50,0 150,60 200,30 L200,60 L0,60 Z"
+                fill="rgba(255,255,255,0.15)"/>
+            </svg>
+          </div>
+        </div>
+  
+        <div class="stat-card orange">
+          <div class="stat-icon-wrap">
+            <span class="stat-icon">💰</span>
+          </div>
+          <div class="stat-info">
+            <h2>₹{{ totalRevenue }}</h2>
+            <p>Total Revenue</p>
+            <span>From completed bookings</span>
+          </div>
+          <div class="stat-wave">
+            <svg viewBox="0 0 200 60" preserveAspectRatio="none">
+              <path d="M0,30 C50,0 150,60 200,30 L200,60 L0,60 Z"
+                fill="rgba(255,255,255,0.15)"/>
+            </svg>
+          </div>
+        </div>
+  
+        <div class="stat-card red">
+          <div class="stat-icon-wrap">
+            <span class="stat-icon">❌</span>
+          </div>
+          <div class="stat-info">
+            <h2>{{ cancelledCount }}</h2>
+            <p>Cancelled</p>
+            <span>Cancelled bookings</span>
+          </div>
+          <div class="stat-wave">
+            <svg viewBox="0 0 200 60" preserveAspectRatio="none">
+              <path d="M0,30 C50,0 150,60 200,30 L200,60 L0,60 Z"
+                fill="rgba(255,255,255,0.15)"/>
+            </svg>
+          </div>
+        </div>
+  
+      </div>
+  
+      <!-- ===== MIDDLE ROW ===== -->
+      <div class="middle-row">
+  
+        <!-- Booking Status Overview -->
+        <div class="card status-card">
+          <div class="card-header">
+            <h3>📈 Booking Status Overview</h3>
+          </div>
+          <div class="card-body">
+  
+            <div class="status-item" *ngIf="totalBookings === 0">
+              <p class="no-data">No bookings yet</p>
+            </div>
+  
+            <div class="status-item" *ngIf="totalBookings > 0">
+              <div class="status-row">
+                <div class="status-left">
+                  <span class="dot pending"></span>
+                  <span class="status-label">Pending</span>
+                </div>
+                <div class="status-right">
+                  <div class="bar-track">
+                    <div class="bar-fill pending"
+                      [style.width.%]="getPercent(pendingCount)"></div>
+                  </div>
+                  <span class="status-count">{{ pendingCount }}</span>
+                </div>
+              </div>
+            </div>
+  
+            <div class="status-item" *ngIf="totalBookings > 0">
+              <div class="status-row">
+                <div class="status-left">
+                  <span class="dot confirmed"></span>
+                  <span class="status-label">Confirmed</span>
+                </div>
+                <div class="status-right">
+                  <div class="bar-track">
+                    <div class="bar-fill confirmed"
+                      [style.width.%]="getPercent(confirmedCount)"></div>
+                  </div>
+                  <span class="status-count">{{ confirmedCount }}</span>
+                </div>
+              </div>
+            </div>
+  
+            <div class="status-item" *ngIf="totalBookings > 0">
+              <div class="status-row">
+                <div class="status-left">
+                  <span class="dot completed"></span>
+                  <span class="status-label">Completed</span>
+                </div>
+                <div class="status-right">
+                  <div class="bar-track">
+                    <div class="bar-fill completed"
+                      [style.width.%]="getPercent(completedCount)"></div>
+                  </div>
+                  <span class="status-count">{{ completedCount }}</span>
+                </div>
+              </div>
+            </div>
+  
+            <div class="status-item" *ngIf="totalBookings > 0">
+              <div class="status-row">
+                <div class="status-left">
+                  <span class="dot cancelled"></span>
+                  <span class="status-label">Cancelled</span>
+                </div>
+                <div class="status-right">
+                  <div class="bar-track">
+                    <div class="bar-fill cancelled"
+                      [style.width.%]="getPercent(cancelledCount)"></div>
+                  </div>
+                  <span class="status-count">{{ cancelledCount }}</span>
+                </div>
+              </div>
+            </div>
+  
+          </div>
+        </div>
+  
+        <!-- Quick Actions -->
+        <div class="card quick-card">
+          <div class="card-header">
+            <h3>⚡ Quick Actions</h3>
+          </div>
+          <div class="card-body">
+            <a routerLink="/admin/services" class="quick-link">
+              <div class="quick-link-icon pink-bg">💅</div>
+              <div class="quick-link-text">
+                <h4>Manage Services</h4>
+                <p>Add, edit or remove services</p>
+              </div>
+              <span class="arrow">→</span>
+            </a>
+            <a routerLink="/admin/bookings" class="quick-link">
+              <div class="quick-link-icon blue-bg">📅</div>
+              <div class="quick-link-text">
+                <h4>Manage Bookings</h4>
+                <p>Update booking statuses</p>
+              </div>
+              <span class="arrow">→</span>
+            </a>
+            <a routerLink="/admin/users" class="quick-link">
+              <div class="quick-link-icon purple-bg">👥</div>
+              <div class="quick-link-text">
+                <h4>Manage Users</h4>
+                <p>View all registered customers</p>
+              </div>
+              <span class="arrow">→</span>
+            </a>
+          </div>
+        </div>
+  
+      </div>
+  
+      <!-- ===== RECENT BOOKINGS TABLE ===== -->
+      <div class="card table-card" *ngIf="bookings.length > 0">
+        <div class="card-header">
+          <h3>🕐 Recent Bookings</h3>
+          <a routerLink="/admin/bookings" class="view-all">View All →</a>
+        </div>
+        <div class="table-scroll">
+          <table>
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Customer</th>
+                <th>Service</th>
+                <th>Date</th>
+                <th>Time</th>
+                <th>Amount</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let b of bookings.slice(0, 8); let i = index">
+                <td class="num">{{ i + 1 }}</td>
+                <td>
+                  <div class="user-cell">
+                    <div class="avatar">{{ getInitial(b.user?.name) }}</div>
+                    <div class="user-info">
+                      <strong>{{ b.user?.name || 'N/A' }}</strong>
+                      <small>{{ b.user?.email }}</small>
+                    </div>
+                  </div>
+                </td>
+                <td>
+                  <div class="service-cell">
+                    <img *ngIf="b.service?.image"
+                      [src]="b.service.image"
+                      [alt]="b.service?.name"
+                      class="service-thumb" />
+                    <span>{{ b.service?.name || 'N/A' }}</span>
+                  </div>
+                </td>
+                <td>{{ b.date | date:'dd MMM yyyy' }}</td>
+                <td>{{ b.time }}</td>
+                <td><strong class="amount">₹{{ b.service?.price || 0 }}</strong></td>
+                <td>
+                  <span class="badge" [class]="b.status">{{ b.status }}</span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+  
+      <!-- EMPTY BOOKINGS -->
+      <div class="card empty-card" *ngIf="bookings.length === 0">
+        <div class="empty-state">
+          <div class="empty-icon">📭</div>
+          <h3>No bookings yet</h3>
+          <p>Bookings will appear here once customers start booking services.</p>
+          <a routerLink="/admin/services" class="btn-primary">+ Add Services First</a>
+        </div>
+      </div>
+  
+    </ng-container>
+  
+  </div>

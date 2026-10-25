@@ -1,0 +1,178 @@
+<div class="auth-page">
+
+    <div class="auth-left">
+      <div class="brand">
+        <div class="brand-icon">💄</div>
+        <h2>Beauty Parlour</h2>
+        <p>Your beauty, our passion</p>
+      </div>
+      <div class="features">
+        <div class="feature-item">
+          <span class="feature-icon">💅</span>
+          <div>
+            <h4>Premium Services</h4>
+            <p>Expert care with top products</p>
+          </div>
+        </div>
+        <div class="feature-item">
+          <span class="feature-icon">📅</span>
+          <div>
+            <h4>Easy Booking</h4>
+            <p>Book appointments anytime</p>
+          </div>
+        </div>
+        <div class="feature-item">
+          <span class="feature-icon">⭐</span>
+          <div>
+            <h4>Trusted by Many</h4>
+            <p>Hundreds of happy customers</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+    <!-- RIGHT: FORM -->
+    <div class="auth-right">
+      <div class="auth-card">
+  
+        <!-- Header -->
+        <div class="card-header">
+          <div class="card-icon">🌸</div>
+          <h2>Create Account</h2>
+          <p>Join us for a beautiful experience</p>
+        </div>
+  
+        <!-- Alerts -->
+        <div class="alert error"   *ngIf="error">
+          <span>⚠️</span> {{ error }}
+        </div>
+        <div class="alert success" *ngIf="success">
+          <span>✅</span> {{ success }}
+        </div>
+  
+        <!-- Full Name -->
+        <div class="form-group" [class.has-error]="submitted && !form.name.trim()">
+          <label>
+            <span class="label-icon">👤</span> Full Name
+            <span class="req">*</span>
+          </label>
+          <input
+            type="text"
+            [(ngModel)]="form.name"
+            placeholder="Enter your full name"
+            [class.invalid]="submitted && !form.name.trim()"
+          />
+          <span class="field-err" *ngIf="submitted && !form.name.trim()">
+            Full name is required
+          </span>
+        </div>
+  
+        <!-- Email -->
+        <div class="form-group" [class.has-error]="submitted && !form.email.trim()">
+          <label>
+            <span class="label-icon">📧</span> Email Address
+            <span class="req">*</span>
+          </label>
+          <input
+            type="email"
+            [(ngModel)]="form.email"
+            placeholder="Enter your email"
+            [class.invalid]="submitted && !form.email.trim()"
+          />
+          <span class="field-err" *ngIf="submitted && !form.email.trim()">
+            Email is required
+          </span>
+        </div>
+  
+        <!-- Phone -->
+        <div class="form-group">
+          <label>
+            <span class="label-icon">📱</span> Phone Number
+            <span class="optional">(optional)</span>
+          </label>
+          <input
+            type="tel"
+            [(ngModel)]="form.phone"
+            placeholder="Enter your phone number"
+          />
+        </div>
+  
+        <!-- Password -->
+        <div class="form-group">
+          <label>
+            <span class="label-icon">🔒</span> Password
+            <span class="req">*</span>
+          </label>
+          <div class="input-wrap">
+            <input
+              [type]="showPassword ? 'text' : 'password'"
+              [(ngModel)]="form.password"
+              placeholder="Min 6 characters"
+              [class.invalid]="submitted && form.password.length < 6"
+            />
+            <button class="eye-btn" (click)="togglePassword()" type="button">
+              {{ showPassword ? '🙈' : '👁️' }}
+            </button>
+          </div>
+          <!-- Password strength -->
+          <div class="strength-bar" *ngIf="form.password">
+            <div class="strength-track">
+              <div class="strength-fill"
+                [class]="passwordStrength"></div>
+            </div>
+            <span class="strength-label">{{ strengthLabel }}</span>
+          </div>
+          <span class="field-err" *ngIf="submitted && form.password.length < 6 && form.password">
+            Password must be at least 6 characters
+          </span>
+        </div>
+  
+        <!-- Confirm Password -->
+        <div class="form-group">
+          <label>
+            <span class="label-icon">🔐</span> Confirm Password
+            <span class="req">*</span>
+          </label>
+          <div class="input-wrap">
+            <input
+              [type]="showConfirm ? 'text' : 'password'"
+              [(ngModel)]="form.confirmPassword"
+              placeholder="Re-enter your password"
+              [class.invalid]="submitted && form.password !== form.confirmPassword"
+            />
+            <button class="eye-btn" (click)="toggleConfirm()" type="button">
+              {{ showConfirm ? '🙈' : '👁️' }}
+            </button>
+          </div>
+          <span class="field-err"
+            *ngIf="submitted && form.confirmPassword && form.password !== form.confirmPassword">
+            Passwords do not match
+          </span>
+          <span class="match-ok"
+            *ngIf="form.confirmPassword && form.password === form.confirmPassword">
+            ✅ Passwords match
+          </span>
+        </div>
+  
+        <!-- Submit -->
+        <button
+          (click)="register()"
+          [disabled]="loading"
+          class="btn-submit"
+        >
+          <span *ngIf="!loading">🌸 Create Account</span>
+          <span *ngIf="loading" class="loading-text">
+            <span class="btn-spinner"></span> Creating account...
+          </span>
+        </button>
+  
+        <!-- Login link -->
+        <p class="login-link">
+          Already have an account?
+          <a routerLink="/login">Login here →</a>
+        </p>
+  
+      </div>
+    </div>
+  
+  </div>

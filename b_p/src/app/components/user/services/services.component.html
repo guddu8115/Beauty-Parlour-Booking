@@ -1,0 +1,98 @@
+<div class="page">
+
+    <!-- HERO BANNER -->
+    <div class="hero">
+      <div class="hero-content">
+        <h1>✨ Our Services</h1>
+        <p>Explore our wide range of premium beauty treatments</p>
+  
+        <!-- Search Bar -->
+        <div class="search-bar">
+          <span class="search-icon">🔍</span>
+          <input
+            type="text"
+            [(ngModel)]="searchText"
+            (ngModelChange)="filterServices()"
+            placeholder="Search services..."
+          />
+          <button *ngIf="searchText" (click)="clearFilters()" class="clear-btn">✕</button>
+        </div>
+      </div>
+    </div>
+  
+    <!-- LOGIN NOTICE -->
+    <div class="login-notice" *ngIf="!isLoggedIn">
+      <span>⚠️</span>
+      <p>Please <a routerLink="/login">login</a> or <a routerLink="/register">register</a> to book a service.</p>
+    </div>
+  
+    
+    <!-- LOADING -->
+    <div class="loading-state" *ngIf="loading">
+      <div class="spinner"></div>
+      <p>Loading services...</p>
+    </div>
+  
+    <!-- RESULTS INFO -->
+    <div class="results-info" *ngIf="!loading && services.length > 0">
+      <span>
+        Showing <strong>{{ filteredServices.length }}</strong> of
+        <strong>{{ services.length }}</strong> services
+      </span>
+      <button *ngIf="searchText || selectedCategory" (click)="clearFilters()" class="clear-all">
+        Clear filters ✕
+      </button>
+    </div>
+  
+    <!-- SERVICES GRID -->
+    <div class="services-grid" *ngIf="!loading && filteredServices.length > 0">
+      <div class="service-card" *ngFor="let s of filteredServices">
+  
+        <!-- Image -->
+        <div class="card-image">
+          <img *ngIf="s.image" [src]="s.image" [alt]="s.name" />
+          <div class="card-image-placeholder" *ngIf="!s.image">
+            <span>{{ getCategoryIcon(s.category) }}</span>
+          </div>
+          <div class="category-badge">{{ s.category || 'General' }}</div>
+        </div>
+  
+        <!-- Content -->
+        <div class="card-content">
+          <h3>{{ s.name }}</h3>
+          <p class="description" *ngIf="s.description">{{ s.description }}</p>
+  
+          <div class="card-meta">
+            <span class="price">₹{{ s.price }}</span>
+            <span class="duration" *ngIf="s.duration">⏱ {{ s.duration }}</span>
+          </div>
+  
+          <!-- Book Button -->
+          <button
+            (click)="book(s)"
+            class="btn-book"
+            [class.btn-login]="!isLoggedIn"
+          >
+            {{ isLoggedIn ? '📅 Book Now' : '🔒 Login to Book' }}
+          </button>
+        </div>
+  
+      </div>
+    </div>
+  
+    <!-- NO RESULTS -->
+    <div class="no-results" *ngIf="!loading && filteredServices.length === 0 && services.length > 0">
+      <div class="no-results-icon">🔍</div>
+      <h3>No services found</h3>
+      <p>Try a different search or category.</p>
+      <button (click)="clearFilters()" class="btn-clear">Clear Filters</button>
+    </div>
+  
+    <!-- EMPTY STATE -->
+    <div class="empty-state" *ngIf="!loading && services.length === 0">
+      <div class="empty-icon">💅</div>
+      <h3>No services available</h3>
+      <p>Check back soon for our beauty services.</p>
+    </div>
+  
+  </div>

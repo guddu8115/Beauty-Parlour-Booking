@@ -1,0 +1,260 @@
+<div class="page">
+
+    <!-- TOP BAR -->
+    <div class="page-top">
+      <div class="page-title">
+        <span class="title-icon">💅</span>
+        <h1>Manage Services</h1>
+      </div>
+      <button (click)="toggleForm()" class="btn-add">
+        {{ showForm ? '✕ Close Form' : '+ Add Service' }}
+      </button>
+    </div>
+  
+    <!-- ADD / EDIT FORM -->
+    <div class="form-box" *ngIf="showForm">
+  
+      <div class="form-header">
+        <h3>{{ editing ? '✏️ Edit Service' : '➕ Add New Service' }}</h3>
+        <p>{{ editing ? 'Update the service details below' : 'Fill in the details to add a new service' }}</p>
+      </div>
+  
+      <div class="alert error"   *ngIf="formError">⚠️ {{ formError }}</div>
+      <div class="alert success" *ngIf="formSuccess">✅ {{ formSuccess }}</div>
+  
+      <!-- ROW 1: Name + Price -->
+      <div class="form-grid">
+  
+        <div class="form-group">
+          <label>Service Name <span class="req">*</span></label>
+          <input
+            type="text"
+            [(ngModel)]="form.name"
+            placeholder="e.g. Hair Spa, Facial, Manicure"
+            [class.invalid]="submitted && !form.name"
+          />
+          <span class="field-error" *ngIf="submitted && !form.name">
+            Name is required
+          </span>
+        </div>
+  
+        <div class="form-group">
+          <label>Price (₹) <span class="req">*</span></label>
+          <input
+            type="number"
+            [(ngModel)]="form.price"
+            placeholder="e.g. 500"
+            min="1"
+            [class.invalid]="submitted && form.price <= 0"
+          />
+          <span class="field-error" *ngIf="submitted && form.price <= 0">
+            Enter a valid price
+          </span>
+        </div>
+  
+        <div class="form-group">
+          <label>Duration</label>
+          <input
+            type="text"
+            [(ngModel)]="form.duration"
+            placeholder="e.g. 30 min, 1 hour"
+          />
+        </div>
+  
+        <div class="form-group">
+          <label>Category <span class="req">*</span></label>
+          <select
+            [(ngModel)]="form.category"
+            [class.invalid]="submitted && !form.category"
+          >
+            <option value="">-- Select Category --</option>
+            <option *ngFor="let cat of categories" [value]="cat">{{ cat }}</option>
+          </select>
+          <span class="field-error" *ngIf="submitted && !form.category">
+            Please select a category
+          </span>
+        </div>
+  
+      </div>
+  
+      <!-- Description -->
+      <div class="form-group full-width">
+        <label>Description</label>
+        <textarea
+          [(ngModel)]="form.description"
+          rows="3"
+          placeholder="Describe what this service includes..."
+        ></textarea>
+      </div>
+  
+      <!-- IMAGE UPLOAD -->
+      <div class="form-group full-width">
+        <label>Service Image</label>
+        <div class="upload-wrapper">
+  
+          <!-- Left: Drop zone -->
+          <div class="upload-left">
+            <div
+              class="drop-zone"
+              [class.has-image]="imagePreview"
+              (click)="fileInput.click()"
+              (dragover)="$event.preventDefault()"
+              (drop)="onDrop($event)"
+            >
+              <input
+                #fileInput
+                type="file"
+                accept="image/png,image/jpeg,image/webp,image/gif"
+                (change)="onImageSelect($event)"
+                style="display:none"
+              />
+  
+              <!-- Placeholder -->
+              <ng-container *ngIf="!imagePreview">
+                <div class="drop-icon">🖼️</div>
+                <p class="drop-title">Click to choose image</p>
+                <p class="drop-sub">or drag and drop here</p>
+                <span class="drop-hint">PNG, JPG, WEBP — max 5MB</span>
+              </ng-container>
+  
+              <!-- Preview -->
+              <ng-container *ngIf="imagePreview">
+                <img [src]="imagePreview" alt="Preview" class="preview-img" />
+                <div class="preview-overlay">
+                  <span>🔄 Click to change image</span>
+                </div>
+              </ng-container>
+            </div>
+  
+            <!-- File name + remove -->
+            <div class="file-info" *ngIf="form.imageName">
+              <span class="file-name">📎 {{ form.imageName }}</span>
+              <button class="btn-remove-img" (click)="removeImage()">
+                ✕ Remove
+              </button>
+            </div>
+          </div>
+  
+          <!-- Right: Guidelines -->
+          <div class="upload-right">
+            <h4>📋 Image Guidelines</h4>
+            <ul>
+              <li>✅ Use a clear, bright photo</li>
+              <li>✅ Square or landscape works best</li>
+              <li>✅ Max file size: 5MB</li>
+              <li>✅ Supported: JPG, PNG, WEBP</li>
+              <li>❌ Avoid blurry or dark images</li>
+            </ul>
+            <p class="img-tip">💡 A good image increases bookings!</p>
+          </div>
+  
+        </div>
+      </div>
+  
+      <!-- FORM ACTIONS -->
+      <div class="form-actions">
+        <button (click)="cancel()" class="btn-cancel">✕ Cancel</button>
+        <button (click)="save()" [disabled]="saving" class="btn-save">
+          <span *ngIf="!saving">
+            {{ editing ? '✅ Update Service' : '✅ Add Service' }}
+          </span>
+          <span *ngIf="saving">⏳ Saving...</span>
+        </button>
+      </div>
+  
+    </div>
+  
+    <!-- LOADING STATE -->
+    <div class="loading-state" *ngIf="loading">
+      <div class="spinner"></div>
+      <p>Loading services...</p>
+    </div>
+  
+    <!-- EMPTY STATE -->
+    <div class="empty-state"
+      *ngIf="!loading && services.length === 0 && !showForm">
+      <div class="empty-icon">💅</div>
+      <h3>No services added yet</h3>
+      <p>Click <strong>+ Add Service</strong> to add your first service.</p>
+    </div>
+  
+    <!-- SERVICES TABLE -->
+    <div class="table-wrapper" *ngIf="!loading && services.length > 0">
+  
+      <div class="table-header">
+        <span>{{ services.length }} service{{ services.length !== 1 ? 's' : '' }} total</span>
+        <span class="active-count">{{ activeCount }} active</span>
+      </div>
+  
+      <div class="table-scroll">
+        <table>
+          <thead>
+            <tr>
+              <th class="col-img">Image</th>
+              <th class="col-name">Service Name</th>
+              <th class="col-cat">Category</th>
+              <th class="col-price">Price</th>
+              <th class="col-dur">Duration</th>
+              <th class="col-status">Status</th>
+              <th class="col-actions">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let s of services" [class.inactive-row]="!s.isActive">
+  
+              <!-- Image -->
+              <td class="col-img">
+                <div class="thumb">
+                  <img *ngIf="s.image" [src]="s.image" [alt]="s.name" />
+                  <div class="thumb-placeholder" *ngIf="!s.image">💅</div>
+                </div>
+              </td>
+  
+              <!-- Name + desc -->
+              <td class="col-name">
+                <strong class="service-name">{{ s.name }}</strong>
+                <small *ngIf="s.description">{{ s.description }}</small>
+              </td>
+  
+              <!-- Category -->
+              <td class="col-cat">
+                <span class="cat-tag" *ngIf="s.category">{{ s.category }}</span>
+                <span class="no-cat"  *ngIf="!s.category">—</span>
+              </td>
+  
+              <!-- Price -->
+              <td class="col-price">
+                <strong class="price">₹{{ s.price }}</strong>
+              </td>
+  
+              <!-- Duration -->
+              <td class="col-dur">{{ s.duration || '—' }}</td>
+  
+              <!-- Status -->
+              <td class="col-status">
+                <span class="status-badge"
+                  [class.active]="s.isActive"
+                  [class.inactive]="!s.isActive">
+                  {{ s.isActive ? '● Active' : '○ Inactive' }}
+                </span>
+              </td>
+  
+              <!-- Actions -->
+              <td class="col-actions">
+                <div class="action-btns">
+                  <button (click)="edit(s)" class="btn-edit">✏️ Edit</button>
+                  <button (click)="toggle(s)" class="btn-toggle">
+                    {{ s.isActive ? '🔴 Off' : '🟢 On' }}
+                  </button>
+                  <button (click)="deleteService(s._id)" class="btn-del">🗑️</button>
+                </div>
+              </td>
+  
+            </tr>
+          </tbody>
+        </table>
+      </div>
+  
+    </div>
+  
+  </div>
